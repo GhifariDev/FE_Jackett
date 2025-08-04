@@ -24,7 +24,7 @@ const Navbar = () => {
           
           {/* Left: Logo */}
           <div className="flex-shrink-0 flex items-center space-x-2">
-            <img src="/logo.png" alt="Logo" className="h-8 w-auto" />
+            <img src="/logo.svg" alt="Logo" className="h-8 w-auto" />
             <span className="font-bold text-gray-800 text-lg">JAXEL</span>
           </div>
 
