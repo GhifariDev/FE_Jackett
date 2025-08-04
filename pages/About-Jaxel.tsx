@@ -1,7 +1,7 @@
 const aboutJaxel = () =>{
     return(
         <>
-        <div>
+        <div className="my-40">
             testing
         </div>
         </>

@@ -1,39 +1,54 @@
+'use client';
+
 import { useEffect, useState } from "react";
-import { FaShoppingCart, FaUserCircle } from "react-icons/fa";
+import { FaShoppingCart, FaUserCircle, FaBars, FaTimes } from "react-icons/fa";
 
 const Navbar = () => {
   const [userName, setUserName] = useState("");
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   useEffect(() => {
-    const storedUser = localStorage.getItem("user");
-    if (storedUser) {
-     const parsedUser = JSON.parse(storedUser);
-      setUserName(parsedUser.name || "User");
+    const getCookie = (name: string): string | undefined => {
+      const value = `; ${document.cookie}`;
+      const parts = value.split(`; ${name}=`);
+      if (parts.length === 2) return parts.pop()?.split(";").shift();
+    };
+
+    const userCookie = getCookie("user");
+    if (userCookie) {
+      try {
+        const parsedUser = JSON.parse(decodeURIComponent(userCookie));
+        setUserName(parsedUser.name || "User");
+      } catch (error) {
+        console.error("Failed to parse user cookie:", error);
+      }
     }
   }, []);
 
   const handleLogout = () => {
-    localStorage.removeItem("user");
+    document.cookie = "user=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
     window.location.href = "/login";
   };
+
+  const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
 
   return (
     <nav className="bg-white shadow-md fixed w-full top-0 z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-10">
         <div className="flex items-center justify-between h-16">
           
-          {/* Left: Logo */}
-          <div className="flex-shrink-0 flex items-center space-x-2">
+          {/* Logo */}
+          <div className="flex items-center space-x-2">
             <img src="/logo.svg" alt="Logo" className="h-8 w-auto" />
             <span className="font-bold text-gray-800 text-lg">JAXEL</span>
           </div>
 
-          {/* Middle: Navigation Links + Search */}
+          {/* Desktop Links */}
           <div className="hidden md:flex items-center space-x-6">
             <a href="/" className="text-sm text-gray-700 hover:text-green-700 font-medium">HOME</a>
-               <a href="/products" className="text-sm text-gray-700 hover:text-green-700 font-medium">PRODUCTS</a>
+            <a href="/products" className="text-sm text-gray-700 hover:text-green-700 font-medium">PRODUCTS</a>
             <a href="#" className="text-sm text-gray-700 hover:text-green-700 font-medium">PRODUCTS DISCOUNT</a>
-            <a href="#" className="text-sm text-gray-700 hover:text-green-700 font-medium">ABOUT JAXEL</a>
+            <a href="/About-Jaxel" className="text-sm text-gray-700 hover:text-green-700 font-medium">ABOUT JAXEL</a>
             <input
               type="text"
               placeholder="Search Our Products"
@@ -41,13 +56,12 @@ const Navbar = () => {
             />
           </div>
 
-          {/* Right: Cart + User */}
-          <div className="flex items-center space-x-6">
+          {/* Right side: only on Desktop */}
+          <div className="hidden md:flex items-center space-x-6">
             <a href="/cart" className="text-gray-700 hover:text-green-700">
               <FaShoppingCart size={20} />
             </a>
 
-            {/* User Dropdown */}
             {userName ? (
               <div className="relative group">
                 <button className="flex items-center space-x-1 text-gray-700 hover:text-green-700">
@@ -59,7 +73,7 @@ const Navbar = () => {
                     onClick={handleLogout}
                     className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                   >
-                    Logoutin gw
+                    Logout
                   </button>
                 </div>
               </div>
@@ -68,11 +82,41 @@ const Navbar = () => {
             )}
           </div>
 
+          {/* Hamburger Button (Mobile Only) */}
+          <div className="md:hidden">
+            <button onClick={toggleMenu} className="text-gray-700 focus:outline-none">
+              {isMenuOpen ? <FaTimes size={20} /> : <FaBars size={20} />}
+            </button>
+          </div>
         </div>
       </div>
+
+      {/* Mobile Menu (Only links, no cart/login) */}
+    {isMenuOpen && (
+  <div className="md:hidden px-4 pt-2 pb-4 space-y-2 bg-white shadow">
+    <a href="/" className="block text-sm text-gray-700 hover:text-green-700">HOME</a>
+    <a href="/products" className="block text-sm text-gray-700 hover:text-green-700">PRODUCTS</a>
+    <a href="#" className="block text-sm text-gray-700 hover:text-green-700">PRODUCTS DISCOUNT</a>
+    <a href="/About-Jaxel" className="block text-sm text-gray-700 hover:text-green-700">ABOUT JAXEL</a>
+
+    {/* Mobile-only: CART + Auth */}
+    <hr className="my-2 border-gray-200" />
+    <a href="/cart" className="block text-sm text-gray-700 hover:text-green-700">CART</a>
+    {userName ? (
+      <button
+        onClick={handleLogout}
+        className="block w-full text-left text-sm text-red-600 hover:text-red-800"
+      >
+        Logout
+      </button>
+    ) : (
+      <a href="/login" className="block text-sm text-gray-700 hover:text-green-700">Login</a>
+    )}
+  </div>
+)}
+
     </nav>
   );
 };
 
 export default Navbar;
-  
