@@ -23,7 +23,7 @@ export default function AuthForm({ mode }: Props) {
   const handleSubmit = async () => {
     try {
       const endpoint = mode === 'login' ? '/api/login' : '/api/register';
-    const res = await fetch(`https://46a780f1-beb6-46f3-8ef7-cd86ae9a391f-00-32rqnauvtwu7g.pike.replit.dev${endpoint}`, {
+    const res = await fetch(`https://46a780f1-beb6-46f3-8ef7-cd86ae9a391f-00-32rqnauvtwu7g.pike.replit.dev/${endpoint}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(form),
