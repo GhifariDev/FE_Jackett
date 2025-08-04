@@ -22,7 +22,7 @@ const AllProducts = () => {
   return (
     <section className="bg-black py-20 px-6 md:px-12 min-h-screen">
       <h2 className="text-4xl font-extrabold text-white mb-12 text-center tracking-tight">
-        Semua Produk
+        Semua Produkk
       </h2>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-10">
         {products.map((product) => (
