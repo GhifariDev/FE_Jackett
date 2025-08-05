@@ -48,7 +48,7 @@ const handleSubmit = async (e: React.FormEvent) => {
   }
 
   try {
-    const response = await fetch('http://localhost:3001/api/penjualan-baju', {
+    const response = await fetch('https://46a780f1-beb6-46f3-8ef7-cd86ae9a391f-00-32rqnauvtwu7g.pike.replit.dev/api/penjualan-baju', {
       method: 'POST',
       body: formPayload,
       credentials: 'include', // ← penting kalau pakai cookie
