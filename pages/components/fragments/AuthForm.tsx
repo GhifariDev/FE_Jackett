@@ -23,7 +23,7 @@ export default function AuthForm({ mode }: Props) {
   const handleSubmit = async () => {
     try {
       const endpoint = mode === 'login' ? '/api/login' : '/api/register';
-      const res = await fetch(`https://46a780f1-beb6-46f3-8ef7-cd86ae9a391f-00-32rqnauvtwu7g.pike.replit.dev${endpoint}`, {
+      const res = await fetch(`http://localhost:3001${endpoint}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
@@ -110,14 +110,14 @@ export default function AuthForm({ mode }: Props) {
         </div>
 
         {/* Google Button */}
-      {/* Google Button */}
-<button
-  onClick={() => alert('Login dengan Google belum tersedia')}
-  className="w-full flex items-center justify-center border border-gray-300 rounded-md py-2 hover:bg-gray-100 transition"
->
-  <img src="/google-logo.png" alt="Google" className="w-5 h-5 mr-2" />
-  <span className="text-sm text-gray-700">Sign in with Google</span>
-</button>
+        {/* Google Button */}
+        <button
+          onClick={() => alert('Login dengan Google belum tersedia')}
+          className="w-full flex items-center justify-center border border-gray-300 rounded-md py-2 hover:bg-gray-100 transition"
+        >
+          <img src="/google-logo.png" alt="Google" className="w-5 h-5 mr-2" />
+          <span className="text-sm text-gray-700">Sign in with Google</span>
+        </button>
 
       </div>
     </div>

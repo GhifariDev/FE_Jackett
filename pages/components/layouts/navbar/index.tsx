@@ -14,21 +14,24 @@ const Navbar = () => {
       if (parts.length === 2) return parts.pop()?.split(";").shift();
     };
 
-    const userCookie = getCookie("user");
-    if (userCookie) {
-      try {
-        const parsedUser = JSON.parse(decodeURIComponent(userCookie));
-        setUserName(parsedUser.name || "User");
-      } catch (error) {
-        console.error("Failed to parse user cookie:", error);
-      }
+    const name = getCookie("user_name");
+    if (name) {
+      setUserName(decodeURIComponent(name));
     }
   }, []);
 
-  const handleLogout = () => {
-    document.cookie = "user=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-    window.location.href = "/login";
-  };
+  const handleLogout = async () => {
+  try {
+    await fetch('http://localhost:3001/api/logout', {
+      method: 'POST',
+      credentials: 'include', // ← WAJIB! agar cookie dikirim ke BE
+    });
+    window.location.href = '/login';
+  } catch (error) {
+    console.error('Logout gagal:', error);
+  }
+};
+
 
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
 
@@ -36,7 +39,6 @@ const Navbar = () => {
     <nav className="bg-white shadow-md fixed w-full top-0 z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-10">
         <div className="flex items-center justify-between h-16">
-          
           {/* Logo */}
           <div className="flex items-center space-x-2">
             <img src="/logo.svg" alt="Logo" className="h-8 w-auto" />
@@ -56,7 +58,7 @@ const Navbar = () => {
             />
           </div>
 
-          {/* Right side: only on Desktop */}
+          {/* Right side: Desktop */}
           <div className="hidden md:flex items-center space-x-6">
             <a href="/cart" className="text-gray-700 hover:text-green-700">
               <FaShoppingCart size={20} />
@@ -82,7 +84,7 @@ const Navbar = () => {
             )}
           </div>
 
-          {/* Hamburger Button (Mobile Only) */}
+          {/* Hamburger Button (Mobile) */}
           <div className="md:hidden">
             <button onClick={toggleMenu} className="text-gray-700 focus:outline-none">
               {isMenuOpen ? <FaTimes size={20} /> : <FaBars size={20} />}
@@ -91,30 +93,28 @@ const Navbar = () => {
         </div>
       </div>
 
-      {/* Mobile Menu (Only links, no cart/login) */}
-    {isMenuOpen && (
-  <div className="md:hidden px-4 pt-2 pb-4 space-y-2 bg-white shadow">
-    <a href="/" className="block text-sm text-gray-700 hover:text-green-700">HOME</a>
-    <a href="/products" className="block text-sm text-gray-700 hover:text-green-700">PRODUCTS</a>
-    <a href="#" className="block text-sm text-gray-700 hover:text-green-700">PRODUCTS DISCOUNT</a>
-    <a href="/About-Jaxel" className="block text-sm text-gray-700 hover:text-green-700">ABOUT JAXEL</a>
+      {/* Mobile Menu */}
+      {isMenuOpen && (
+        <div className="md:hidden px-4 pt-2 pb-4 space-y-2 bg-white shadow">
+          <a href="/" className="block text-sm text-gray-700 hover:text-green-700">HOME</a>
+          <a href="/products" className="block text-sm text-gray-700 hover:text-green-700">PRODUCTS</a>
+          <a href="#" className="block text-sm text-gray-700 hover:text-green-700">PRODUCTS DISCOUNT</a>
+          <a href="/About-Jaxel" className="block text-sm text-gray-700 hover:text-green-700">ABOUT JAXEL</a>
 
-    {/* Mobile-only: CART + Auth */}
-    <hr className="my-2 border-gray-200" />
-    <a href="/cart" className="block text-sm text-gray-700 hover:text-green-700">CART</a>
-    {userName ? (
-      <button
-        onClick={handleLogout}
-        className="block w-full text-left text-sm text-red-600 hover:text-red-800"
-      >
-        Logout
-      </button>
-    ) : (
-      <a href="/login" className="block text-sm text-gray-700 hover:text-green-700">Login</a>
-    )}
-  </div>
-)}
-
+          <hr className="my-2 border-gray-200" />
+          <a href="/cart" className="block text-sm text-gray-700 hover:text-green-700">CART</a>
+          {userName ? (
+            <button
+              onClick={handleLogout}
+              className="block w-full text-left text-sm text-red-600 hover:text-red-800"
+            >
+              Logout
+            </button>
+          ) : (
+            <a href="/login" className="block text-sm text-gray-700 hover:text-green-700">Login</a>
+          )}
+        </div>
+      )}
     </nav>
   );
 };

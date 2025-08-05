@@ -1,11 +1,15 @@
 'use client';
-
+import Cookies from 'js-cookie';
 import { useState } from 'react';
+import { useRouter } from 'next/router';
 import FormInput from './components/elements/FromInput';
 import FormTextarea from './components/elements/FromTextArea';
 import ImageGallery from './components/fragments/ImageGalery';
 
 const PenjualanBajuPage = () => {
+    
+const router = useRouter();
+
   const [formData, setFormData] = useState({
     nama: '',
     alamat: '',
@@ -23,11 +27,41 @@ const PenjualanBajuPage = () => {
     setFormData((prev) => ({ ...prev, gambar: file }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    console.log(formData);
-    alert('Form penjualan baju berhasil dikirim!');
-  };
+const handleSubmit = async (e: React.FormEvent) => {
+
+  e.preventDefault();
+
+ const userEmail = Cookies.get('user_email'); // kamu bisa pakai js-cookie atau cara lain
+
+  if (!userEmail) {
+    alert('Silakan login terlebih dahulu sebelum mengisi form.');
+    router.push('/login'); // arahkan ke halaman login
+    return;
+  }
+
+  const formPayload = new FormData();
+  formPayload.append('nama', formData.nama);
+  formPayload.append('alamat', formData.alamat);
+  formPayload.append('alasan', formData.alasan);
+  if (formData.gambar) {
+    formPayload.append('gambar', formData.gambar);
+  }
+
+  try {
+    const response = await fetch('http://localhost:3001/api/penjualan-baju', {
+      method: 'POST',
+      body: formPayload,
+      credentials: 'include', // ← penting kalau pakai cookie
+    });
+
+    const result = await response.json();
+    alert(result.message || 'Form berhasil dikirim!');
+  } catch (error) {
+    console.error('Error submit form:', error);
+    alert('Terjadi kesalahan saat mengirim form.');
+  }
+};
+
 
   return (
     <div className="min-h-screen bg-blue-50 flex items-center justify-center py-10 px-4">
