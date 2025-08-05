@@ -23,10 +23,10 @@ export default function AuthForm({ mode }: Props) {
   const handleSubmit = async () => {
     try {
       const endpoint = mode === 'login' ? '/api/login' : '/api/register';
-    const res = await fetch(`https://46a780f1-beb6-46f3-8ef7-cd86ae9a391f-00-32rqnauvtwu7g.pike.replit.dev${endpoint}`, {
+      const res = await fetch(`https://46a780f1-beb6-46f3-8ef7-cd86ae9a391f-00-32rqnauvtwu7g.pike.replit.dev${endpoint}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-          credentials: 'include', // ✅ WAJIB 
+        credentials: 'include',
         body: JSON.stringify(form),
       });
 
@@ -51,57 +51,69 @@ export default function AuthForm({ mode }: Props) {
   };
 
   return (
-    <div className="min-h-screen flex flex-col md:flex-row">
-      {/* LEFT: ILUSTRASI */}
-      <div className="hidden md:flex w-1/2 bg-green-100 items-center justify-center p-10">
-        <img
-          src="/login.png"
-          alt="Ilustrasi Jaket"
-          className="object-cover"
-        />
-      </div>
+    <div className="min-h-screen flex items-center justify-center bg-white px-4">
+      <div className="w-full max-w-md bg-white p-8 rounded-xl shadow-md border">
+        {/* Logo dan Heading */}
+        <div className="text-center mb-8">
+          <div className="flex justify-center items-center gap-2 mb-1">
+            <img src="/logo.svg" alt="Logo" className="w-6 h-6" />
+            <h1 className="text-xl font-bold text-black">Jaxel Fillament</h1>
+          </div>
+          <p className="text-sm text-gray-600">Silahkan {mode === 'login' ? 'Login' : 'Register'}</p>
+        </div>
 
-      {/* RIGHT: FORM */}
-      <div className="w-full md:w-1/2 flex flex-col justify-center items-center px-6 py-10 bg-green-50">
-        <div className="max-w-md w-full bg-white rounded-xl shadow-md p-8 border border-green-100">
-          <h2 className="text-2xl font-bold text-green-800 mb-6 capitalize text-center">
-            {mode === 'login' ? 'Login Akun' : 'Register Akun'}
-          </h2>
-
+        {/* Form */}
+        <div className="space-y-4">
           {mode === 'register' && (
             <Input name="name" label="Nama Lengkap" onChange={handleChange} />
           )}
           <Input name="email" label="Email" type="email" onChange={handleChange} />
           <Input name="password" label="Password" type="password" onChange={handleChange} />
-
-          {error && <p className="text-red-500 mt-2">{error}</p>}
-          {success && <p className="text-green-600 mt-2">{success}</p>}
-
-          <Button
-            onClick={handleSubmit}
-            className="bg-green-600 hover:bg-green-700 w-full mt-6"
-          >
-            {mode === 'login' ? 'Masuk Sekarang' : 'Daftar Sekarang'}
-          </Button>
-
-          <div className="mt-4 text-center text-sm">
-            {mode === 'login' ? (
-              <p>
-                Belum punya akun?{' '}
-                <Link href="/register" className="text-green-700 hover:underline font-medium">
-                  Register di sini
-                </Link>
-              </p>
-            ) : (
-              <p>
-                Sudah punya akun?{' '}
-                <Link href="/login" className="text-green-700 hover:underline font-medium">
-                  Login di sini
-                </Link>
-              </p>
-            )}
-          </div>
         </div>
+
+        {/* Error & Success */}
+        {error && <p className="text-red-500 mt-2 text-sm text-center">{error}</p>}
+        {success && <p className="text-green-600 mt-2 text-sm text-center">{success}</p>}
+
+        {/* Button */}
+        <Button
+          onClick={handleSubmit}
+          className="bg-blue-500 hover:bg-blue-600 mt-10 text-white font-semibold w-full mt-6 py-3 rounded-md"
+        >
+          {mode === 'login' ? 'Login' : 'Daftar'}
+        </Button>
+
+        {/* Link Daftar / Login */}
+        <div className="text-sm text-center mt-4">
+          {mode === 'login' ? (
+            <>
+              Belum punya akun?{' '}
+              <Link href="/register" className="text-blue-600 hover:underline font-medium">
+                Daftar
+              </Link>
+            </>
+          ) : (
+            <>
+              Sudah punya akun?{' '}
+              <Link href="/login" className="text-blue-600 hover:underline font-medium">
+                Login
+              </Link>
+            </>
+          )}
+        </div>
+
+        {/* Atau */}
+        <div className="flex items-center justify-center my-4">
+          <span className="w-full h-px bg-gray-300" />
+          <span className="px-3 text-sm text-gray-500">or</span>
+          <span className="w-full h-px bg-gray-300" />
+        </div>
+
+        {/* Google Button */}
+        <button className="w-full flex items-center justify-center border border-gray-300 rounded-md py-2 hover:bg-gray-100 transition">
+          <img src="/google-logo.png" alt="Google" className="w-5 h-5 mr-2" />
+          <span className="text-sm text-gray-700">Sign in with Google</span>
+        </button>
       </div>
     </div>
   );
