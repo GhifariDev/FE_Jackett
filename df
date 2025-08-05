@@ -1,0 +1,35 @@
+[33m7c18a01[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m)[m HEAD@{0}: rebase (abort): returning to refs/heads/main
+[33m4367415[m[33m ([m[1;31morigin/main[m[33m)[m HEAD@{1}: pull --rebase origin main (start): checkout 4367415457e4967f060acabf0f7197f834d3a499
+[33m7c18a01[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m)[m HEAD@{2}: commit: tes
+[33m882c2e6[m HEAD@{3}: commit: ubah api
+[33m4cc3397[m HEAD@{4}: commit: ubah api fetch
+[33m8723c65[m HEAD@{5}: commit: change route penjualan baju
+[33m518cd5c[m HEAD@{6}: commit: tes
+[33m91cd21a[m HEAD@{7}: commit: change layout login & register
+[33mf1818eb[m HEAD@{8}: commit: last
+[33m70b8eb9[m HEAD@{9}: commit: last
+[33m5c0cfd8[m HEAD@{10}: commit: add /
+[33mc322194[m HEAD@{11}: commit: fix next.config.js
+[33m704affd[m HEAD@{12}: commit: tesss
+[33mf71b1f1[m HEAD@{13}: commit: tes
+[33m534600a[m HEAD@{14}: commit: tes
+[33m6aed829[m HEAD@{15}: commit: tes
+[33m1fc7138[m HEAD@{16}: commit: reinstall
+[33m72a4756[m HEAD@{17}: commit: reinstall
+[33m92f324a[m HEAD@{18}: commit: turunkan versi react ke 18 dan next ke 14
+[33mb2d4457[m HEAD@{19}: commit: tes
+[33m96f3a28[m HEAD@{20}: commit: tes
+[33mf588a4c[m HEAD@{21}: commit: update
+[33me6aa6f9[m HEAD@{22}: commit: first commit
+[33mdf801df[m HEAD@{23}: pull --rebase origin main (finish): returning to refs/heads/main
+[33mdf801df[m HEAD@{24}: pull --rebase origin main (pick): added new file About Jaxel
+[33mb0c53c4[m HEAD@{25}: pull --rebase origin main (pick): change vanbar
+[33m6de29bb[m HEAD@{26}: pull --rebase origin main (start): checkout 6de29bba20050e1cf727d910f76a8704aa8acfff
+[33mff619dd[m HEAD@{27}: merge Hero_section: Fast-forward
+[33m5e20ff1[m HEAD@{28}: checkout: moving from Hero_section to main
+[33mff619dd[m HEAD@{29}: commit: added new file About Jaxel
+[33m5e20ff1[m HEAD@{30}: checkout: moving from main to Hero_section
+[33m5e20ff1[m HEAD@{31}: commit (merge): update logout gw
+[33mc38009e[m HEAD@{32}: commit: change vanbar
+[33m3f3168e[m HEAD@{33}: commit: tes
+[33m855a80d[m HEAD@{34}: commit (initial): first init
