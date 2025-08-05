@@ -40,7 +40,7 @@ const Services = () => {
       <div className="max-w-7xl mx-auto text-center">
         <h2 className="text-4xl font-extrabold text-white mb-4 tracking-tight">Layanan Kami</h2>
         <p className="text-gray-400 mb-14 max-w-2xl mx-auto text-base">
-          Kami menyediakan berbagai layanan untuk mendukung bisnis fashion Anda secara menyeluruh.
+           berbagai layanan untuk mendukung bisnis fashion Anda secara menyeluruh.
         </p>
         <div className="grid gap-10 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
           {layanan.map((item, index) => (
