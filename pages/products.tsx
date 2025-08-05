@@ -21,7 +21,7 @@
     useEffect(() => {
       AOS.init({ duration: 800, once: true });
 
-      fetch("https://46a780f1-beb6-46f3-8ef7-cd86ae9a391f-00-32rqnauvtwu7g.pike.replit.dev/api/products")
+      fetch("https://511f7285-8b90-463c-b7aa-f7b5ebf5b898-00-12uwkagpsaeuu.sisko.replit.dev/api/products")
         .then((res) => res.json())
         .then((data) => setProducts(data))
         .catch((err) => console.error("Gagal fetch product:", err));
