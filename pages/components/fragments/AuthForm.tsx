@@ -23,7 +23,7 @@ export default function AuthForm({ mode }: Props) {
   const handleSubmit = async () => {
     try {
       const endpoint = mode === 'login' ? '/api/login' : '/api/register';
-      const res = await fetch(`https://511f7285-8b90-463c-b7aa-f7b5ebf5b898-00-12uwkagpsaeuu.sisko.replit.dev${endpoint}`, {
+      const res = await fetch(`http://localhost:3001${endpoint}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',

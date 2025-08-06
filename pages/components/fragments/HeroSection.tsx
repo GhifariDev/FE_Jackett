@@ -14,7 +14,7 @@ const HeroSection = () => {
 
   return (
     <section
-      className="relative w-full h-[80vh] bg-cover bg-center bg-no-repeat"
+      className="relative w-full h-[80vh] md:h-screen bg-cover bg-center bg-no-repeat"
       style={{ backgroundImage: "url('/jaket.jpg')" }}
     >
       {/* Gradient Overlay */}
@@ -28,7 +28,7 @@ const HeroSection = () => {
           className="text-5xl md:text-6xl font-extrabold mb-4 drop-shadow-[0_4px_10px_rgba(255,255,255,0.2)]"
           data-aos="fade-down-left"
         >
-          WHAT’S NEW!
+          WHAT'S NEW!
         </h1>
 
         <p

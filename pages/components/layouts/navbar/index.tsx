@@ -21,101 +21,118 @@ const Navbar = () => {
   }, []);
 
   const handleLogout = async () => {
-  try {
-    await fetch('http://localhost:3001/api/logout', {
-      method: 'POST',
-      credentials: 'include', // ← WAJIB! agar cookie dikirim ke BE
-    });
-    window.location.href = '/login';
-  } catch (error) {
-    console.error('Logout gagal:', error);
-  }
-};
-
+    try {
+      await fetch('http://localhost:3001/api/logout', {
+        method: 'POST',
+        credentials: 'include', // ← WAJIB! agar cookie dikirim ke BE
+      });
+      window.location.href = '/login';
+    } catch (error) {
+      console.error('Logout gagal:', error);
+    }
+  };
 
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
 
   return (
-    <nav className="bg-white shadow-md fixed w-full top-0 z-50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-10">
-        <div className="flex items-center justify-between h-16">
-          {/* Logo */}
-          <div className="flex items-center space-x-2">
-            <img src="/logo.svg" alt="Logo" className="h-8 w-auto" />
-            <span className="font-bold text-gray-800 text-lg">JAXEL</span>
-          </div>
+    <>
+      <nav className="bg-white shadow-md fixed w-full top-0 z-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-10">
+          <div className="flex items-center justify-between h-16">
+            {/* Logo */}
+            <div className="flex items-center space-x-2">
+              <img src="/logo.svg" alt="Logo" className="h-8 w-auto" />
+              <span className="font-bold text-gray-800 text-lg">JAXEL</span>
+            </div>
 
-          {/* Desktop Links */}
-          <div className="hidden md:flex items-center space-x-6">
-            <a href="/" className="text-sm text-gray-700 hover:text-green-700 font-medium">HOME</a>
-            <a href="/products" className="text-sm text-gray-700 hover:text-green-700 font-medium">PRODUCTS</a>
-            <a href="#" className="text-sm text-gray-700 hover:text-green-700 font-medium">PRODUCTS DISCOUNT</a>
-            <a href="/About-Jaxel" className="text-sm text-gray-700 hover:text-green-700 font-medium">ABOUT JAXEL</a>
-            <input
-              type="text"
-              placeholder="Search Our Products"
-              className="px-3 py-1.5 border rounded-full text-sm w-64 focus:outline-none focus:ring focus:border-green-500"
-            />
-          </div>
+            {/* Desktop Links */}
+            <div className="hidden md:flex items-center space-x-6">
+              <a href="/" className="text-sm text-gray-700 hover:text-green-700 font-medium transition-colors">HOME</a>
+              <a href="/products" className="text-sm text-gray-700 hover:text-green-700 font-medium transition-colors">PRODUCTS</a>
+              <a href="/product-discount" className="text-sm text-gray-700 hover:text-green-700 font-medium transition-colors">PRODUCTS DISCOUNT</a>
+              <a href="/aboutJaxel" className="text-sm text-gray-700 hover:text-green-700 font-medium transition-colors">ABOUT JAXEL</a>
+              <input
+                type="text"
+                placeholder="Search Our Products"
+                className="px-3 py-1.5 border border-gray-300 rounded-full text-sm w-64 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all"
+              />
+            </div>
 
-          {/* Right side: Desktop */}
-          <div className="hidden md:flex items-center space-x-6">
-            <a href="/cart" className="text-gray-700 hover:text-green-700">
-              <FaShoppingCart size={20} />
-            </a>
+            {/* Right side: Desktop */}
+            <div className="hidden md:flex items-center space-x-6">
+              <a href="/cart" className="text-gray-700 hover:text-green-700 transition-colors">
+                <FaShoppingCart size={20} />
+              </a>
 
-            {userName ? (
-              <div className="relative group">
-                <button className="flex items-center space-x-1 text-gray-700 hover:text-green-700">
-                  <FaUserCircle size={20} />
-                  <span className="text-sm">{userName}</span>
-                </button>
-                <div className="absolute right-0 mt-2 w-40 bg-white border rounded shadow-md hidden group-hover:block z-50">
-                  <button
-                    onClick={handleLogout}
-                    className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                  >
-                    Logout
+              {userName ? (
+                <div className="relative group">
+                  <button className="flex items-center space-x-1 text-gray-700 hover:text-green-700 transition-colors">
+                    <FaUserCircle size={20} />
+                    <span className="text-sm">{userName}</span>
                   </button>
+                  <div className="absolute right-0 mt-2 w-40 bg-white border border-gray-200 rounded-lg shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
+                    <button
+                      onClick={handleLogout}
+                      className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded-lg transition-colors"
+                    >
+                      Logout
+                    </button>
+                  </div>
                 </div>
-              </div>
+              ) : (
+                <a href="/login" className="text-sm text-gray-700 hover:text-green-700 transition-colors">Login</a>
+              )}
+            </div>
+
+            {/* Hamburger Button (Mobile) */}
+            <div className="md:hidden">
+              <button onClick={toggleMenu} className="text-gray-700 focus:outline-none hover:text-green-700 transition-colors">
+                {isMenuOpen ? <FaTimes size={20} /> : <FaBars size={20} />}
+              </button>
+            </div>
+          </div>
+        </div>
+
+        {/* Mobile Menu */}
+        <div className={`md:hidden transition-all duration-300 ease-in-out ${
+          isMenuOpen ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0 overflow-hidden'
+        }`}>
+          <div className="px-4 pt-2 pb-4 space-y-2 bg-white border-t border-gray-200">
+            <a href="/" className="block py-2 text-sm text-gray-700 hover:text-green-700 hover:bg-gray-50 rounded px-2 transition-colors">HOME</a>
+            <a href="/products" className="block py-2 text-sm text-gray-700 hover:text-green-700 hover:bg-gray-50 rounded px-2 transition-colors">PRODUCTS</a>
+            <a href="#" className="block py-2 text-sm text-gray-700 hover:text-green-700 hover:bg-gray-50 rounded px-2 transition-colors">PRODUCTS DISCOUNT</a>
+            <a href="/aboutJaxel" className="block py-2 text-sm text-gray-700 hover:text-green-700 hover:bg-gray-50 rounded px-2 transition-colors">ABOUT JAXEL</a>
+            
+            <div className="pt-2">
+              <input
+                type="text"
+                placeholder="Search Our Products"
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all"
+              />
+            </div>
+
+            <hr className="my-3 border-gray-200" />
+            <a href="/cart" className="flex items-center space-x-2 py-2 text-sm text-gray-700 hover:text-green-700 hover:bg-gray-50 rounded px-2 transition-colors">
+              <FaShoppingCart size={16} />
+              <span>CART</span>
+            </a>
+            {userName ? (
+              <button
+                onClick={handleLogout}
+                className="block w-full text-left py-2 text-sm text-red-600 hover:text-red-800 hover:bg-red-50 rounded px-2 transition-colors"
+              >
+                Logout ({userName})
+              </button>
             ) : (
-              <a href="/login" className="text-sm text-gray-700 hover:text-green-700">Login</a>
+              <a href="/login" className="block py-2 text-sm text-gray-700 hover:text-green-700 hover:bg-gray-50 rounded px-2 transition-colors">Login</a>
             )}
           </div>
-
-          {/* Hamburger Button (Mobile) */}
-          <div className="md:hidden">
-            <button onClick={toggleMenu} className="text-gray-700 focus:outline-none">
-              {isMenuOpen ? <FaTimes size={20} /> : <FaBars size={20} />}
-            </button>
-          </div>
         </div>
-      </div>
+      </nav>
 
-      {/* Mobile Menu */}
-      {isMenuOpen && (
-        <div className="md:hidden px-4 pt-2 pb-4 space-y-2 bg-white shadow">
-          <a href="/" className="block text-sm text-gray-700 hover:text-green-700">HOME</a>
-          <a href="/products" className="block text-sm text-gray-700 hover:text-green-700">PRODUCTS</a>
-          <a href="#" className="block text-sm text-gray-700 hover:text-green-700">PRODUCTS DISCOUNT</a>
-          <a href="/About-Jaxel" className="block text-sm text-gray-700 hover:text-green-700">ABOUT JAXEL</a>
-
-          <hr className="my-2 border-gray-200" />
-          <a href="/cart" className="block text-sm text-gray-700 hover:text-green-700">CART</a>
-          {userName ? (
-            <button
-              onClick={handleLogout}
-              className="block w-full text-left text-sm text-red-600 hover:text-red-800"
-            >
-              Logout
-            </button>
-          ) : (
-            <a href="/login" className="block text-sm text-gray-700 hover:text-green-700">Login</a>
-          )}
-        </div>
-      )}
-    </nav>
+      {/* Spacer untuk fixed navbar */}
+      <div className="h-16"></div>
+    </>
   );
 };
 
