@@ -2,11 +2,16 @@
 
 import { useEffect, useState } from "react";
 import { FaShoppingCart, FaUserCircle, FaBars, FaTimes } from "react-icons/fa";
+import { useCartStore } from '@/store/cartStore';
+import { ShoppingCart } from "lucide-react";
 
 const Navbar = () => {
   const [userName, setUserName] = useState("");
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-
+const totalItems = (useCartStore((state) => state.items) || []).reduce(
+  (acc, item) => acc + item.quantity,
+  0
+);
   useEffect(() => {
     const getCookie = (name: string): string | undefined => {
       const value = `; ${document.cookie}`;
@@ -94,16 +99,15 @@ const Navbar = () => {
         </div>
 
         {/* Mobile Menu */}
-        <div className={`md:hidden transition-all duration-300 ease-in-out ${
-          isMenuOpen ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0 overflow-hidden'
-        }`}>
+        <div className={`md:hidden transition-all duration-300 ease-in-out ${isMenuOpen ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0 overflow-hidden'
+          }`}>
           <div className="px-4 pt-2 pb-4 space-y-2 bg-white border-t border-gray-200">
             <a href="/" className="block py-2 text-sm text-gray-700 hover:text-green-700 hover:bg-gray-50 rounded px-2 transition-colors">HOME</a>
             <a href="/products" className="block py-2 text-sm text-gray-700 hover:text-green-700 hover:bg-gray-50 rounded px-2 transition-colors">PRODUCTS</a>
             <a href="product-discount" className="block py-2 text-sm text-gray-700 hover:text-green-700 hover:bg-gray-50 rounded px-2 transition-colors">PRODUCTS DISCOUNT</a>
             <a href="/aboutJaxel" className="block py-2 text-sm text-gray-700 hover:text-green-700 hover:bg-gray-50 rounded px-2 transition-colors">ABOUT JAXEL</a>
-              <a href="/riviewskami" className="block py-2 text-sm text-gray-700 hover:text-green-700 hover:bg-gray-50 rounded px-2 transition-colors">KIRIM ULASAN *harus login </a>
-            
+            <a href="/riviewskami" className="block py-2 text-sm text-gray-700 hover:text-green-700 hover:bg-gray-50 rounded px-2 transition-colors">KIRIM ULASAN *harus login </a>
+
             <div className="pt-2">
               <input
                 type="text"
@@ -113,10 +117,14 @@ const Navbar = () => {
             </div>
 
             <hr className="my-3 border-gray-200" />
-            <a href="/cart" className="flex items-center space-x-2 py-2 text-sm text-gray-700 hover:text-green-700 hover:bg-gray-50 rounded px-2 transition-colors">
-              <FaShoppingCart size={16} />
-              <span>CART</span>
-            </a>
+            <div className="relative">
+              <ShoppingCart size={24} />
+              {totalItems > 0 && (
+                <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs px-1.5 py-0.5 rounded-full">
+                  {totalItems}
+                </span>
+              )}
+            </div>
             {userName ? (
               <button
                 onClick={handleLogout}

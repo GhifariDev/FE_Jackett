@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
+import Cookies from 'js-cookie'; // jika kamu pakai cookies
 import { ShoppingCart, Filter, Search, Grid, List } from "lucide-react";
 import AOS from "aos";
 import "aos/dist/aos.css";
+
 
 type Product = {
   id: number;
@@ -35,7 +37,7 @@ const AllProducts = () => {
   const fetchProducts = async () => {
     try {
       setLoading(true);
-      const response = await fetch("http://localhost:3001/api/products");
+      const response = await fetch("https://feaea59b-29c1-410d-876c-82ef3311a0c5-00-2j44gkrr7d6ab.pike.replit.dev/api/products");
       const data = await response.json();
       setProducts(data);
       setFilteredProducts(data);
@@ -66,6 +68,13 @@ const AllProducts = () => {
 
   // Tambahkan produk ke keranjang
   const handleAddToCart = async (productId: number) => {
+      const token = Cookies.get('token'); // atau cara cek login lain (zustand, context, dsb)
+
+  if (!token) {
+    alert("Silakan login terlebih dahulu untuk menambahkan ke keranjang.");
+    router.push('/login');
+    return;
+  }
     try {
       const response = await fetch("http://localhost:3001/api/cart", {
         method: "POST",
@@ -95,6 +104,7 @@ const AllProducts = () => {
 
   const categories = ["all", ...new Set(products.map(p => p.category).filter(Boolean))];
 
+  
   if (loading) {
     return (
       <section className="bg-gray-50 mt-60 min-h-screen py-12 px-6">

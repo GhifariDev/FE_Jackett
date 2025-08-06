@@ -16,7 +16,7 @@ const ReviewForm = () => {
     setSuccess(false);
 
     try {
-      await axios.post('http://localhost:3001/api/review/company', {
+      await axios.post('https://feaea59b-29c1-410d-876c-82ef3311a0c5-00-2j44gkrr7d6ab.pike.replit.dev/api/review/company', {
         content,
         rating
       }, { withCredentials: true }); // kirim cookie JWT juga

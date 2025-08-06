@@ -1,6 +1,6 @@
 // src/lib/api.ts
 export async function apiFetch(url: string, options: RequestInit = {}) {
-  const base = 'http://localhost:3001'; // backend kamu
+  const base = 'https://feaea59b-29c1-410d-876c-82ef3311a0c5-00-2j44gkrr7d6ab.pike.replit.dev'; // backend kamu
 
   const res = await fetch(`${base}${url}`, {
     ...options,
