@@ -138,6 +138,30 @@ const ProductsDiscount = () => {
           imageUrl: "https://images.unsplash.com/photo-1515372039744-b8f02a3ae446?w=400&h=400&fit=crop",
           rating: 4.4,
           sold: 67
+        },
+        {
+          id: 7,
+          title: "Sepatu Sneakers Casual",
+          price: 349000,
+          originalPrice: 599000,
+          discount: 42,
+          category: "Shoes",
+          description: "Sepatu sneakers casual yang nyaman untuk aktivitas sehari-hari",
+          imageUrl: "https://images.unsplash.com/photo-1549298916-b41d501d3772?w=400&h=400&fit=crop",
+          rating: 4.6,
+          sold: 134
+        },
+        {
+          id: 8,
+          title: "Tas Ransel Minimalis",
+          price: 199000,
+          originalPrice: 329000,
+          discount: 39,
+          category: "Bag",
+          description: "Tas ransel dengan desain minimalis untuk gaya urban",
+          imageUrl: "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=400&h=400&fit=crop",
+          rating: 4.5,
+          sold: 78
         }
       ];
       
@@ -219,19 +243,19 @@ const ProductsDiscount = () => {
 
   if (loading) {
     return (
-      <section className="bg-gray-50 min-h-screen py-12 px-6">
+      <section className="bg-gray-50 min-h-screen py-12 px-4">
         <div className="max-w-7xl mx-auto">
           <div className="animate-pulse">
             <div className="h-12 bg-gray-300 rounded w-96 mb-4"></div>
             <div className="h-6 bg-gray-300 rounded w-64 mb-8"></div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4 gap-3 sm:gap-6">
               {Array.from({ length: 8 }).map((_, i) => (
                 <div key={i} className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
-                  <div className="h-64 bg-gray-300"></div>
-                  <div className="p-6">
-                    <div className="h-4 bg-gray-300 rounded mb-2"></div>
-                    <div className="h-4 bg-gray-300 rounded w-3/4 mb-4"></div>
-                    <div className="h-10 bg-gray-300 rounded"></div>
+                  <div className="aspect-square bg-gray-300"></div>
+                  <div className="p-3 sm:p-6">
+                    <div className="h-3 sm:h-4 bg-gray-300 rounded mb-2"></div>
+                    <div className="h-3 sm:h-4 bg-gray-300 rounded w-3/4 mb-4"></div>
+                    <div className="h-8 sm:h-10 bg-gray-300 rounded"></div>
                   </div>
                 </div>
               ))}
@@ -245,46 +269,46 @@ const ProductsDiscount = () => {
   return (
     <div className="bg-gray-50 min-h-screen">
       {/* Hero Banner */}
-      <section className="bg-gradient-to-r from-red-600 via-pink-600 to-red-700 text-white py-16">
-        <div className="max-w-7xl mx-auto px-6 text-center">
+      <section className="bg-gradient-to-r from-red-600 via-pink-600 to-red-700 text-white py-8 sm:py-16">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 text-center">
           <div className="flex justify-center mb-4">
-            <div className="bg-white/20 backdrop-blur-sm rounded-full p-4">
-              <Percent className="w-12 h-12" />
+            <div className="bg-white/20 backdrop-blur-sm rounded-full p-3 sm:p-4">
+              <Percent className="w-8 h-8 sm:w-12 sm:h-12" />
             </div>
           </div>
-          <h1 className="text-4xl md:text-6xl font-bold mb-4">
-         JAXEL DISCOUNT
+          <h1 className="text-2xl sm:text-4xl md:text-6xl font-bold mb-4">
+            JAXEL DISCOUNT
           </h1>
-          <p className="text-xl md:text-2xl mb-6 max-w-3xl mx-auto">
+          <p className="text-lg sm:text-xl md:text-2xl mb-6 max-w-3xl mx-auto">
             Dapatkan diskon hingga 50% untuk semua koleksi fashion terbaik kami!
           </p>
-          <div className="flex justify-center items-center gap-4 text-lg">
-            <Flame className="w-6 h-6 text-orange-300" />
+          <div className="flex justify-center items-center gap-4 text-base sm:text-lg">
+            <Flame className="w-5 h-5 sm:w-6 sm:h-6 text-orange-300" />
             <span>Terbatas! Jangan sampai terlewat</span>
-            <Flame className="w-6 h-6 text-orange-300" />
+            <Flame className="w-5 h-5 sm:w-6 sm:h-6 text-orange-300" />
           </div>
         </div>
       </section>
 
       {/* Main Content */}
-      <section className="py-12 px-6">
+      <section className="py-8 sm:py-12 px-4 sm:px-6">
         <div className="max-w-7xl mx-auto">
           {/* Header with Cart */}
-          <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between mb-8">
-            <div className="mb-6 lg:mb-0">
-              <h2 className="text-3xl font-bold text-gray-900 mb-2">
+          <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between mb-6 sm:mb-8">
+            <div className="mb-4 lg:mb-0">
+              <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">
                 Produk Diskon Terbaik
               </h2>
-              <p className="text-gray-600">
+              <p className="text-gray-600 text-sm sm:text-base">
                 Koleksi produk dengan penawaran terbaik dan diskon menarik
               </p>
             </div>
 
             {/* Cart Icon */}
             <div className="relative">
-              <button className="flex items-center gap-2 bg-white border border-gray-200 rounded-lg px-4 py-2 hover:bg-gray-50 transition-colors shadow-sm">
-                <ShoppingCart size={20} className="text-gray-600" />
-                <span className="text-gray-700 font-medium">Keranjang</span>
+              <button className="flex items-center gap-2 bg-white border border-gray-200 rounded-lg px-3 sm:px-4 py-2 hover:bg-gray-50 transition-colors shadow-sm">
+                <ShoppingCart size={18} className="text-gray-600" />
+                <span className="text-gray-700 font-medium text-sm sm:text-base">Keranjang</span>
                 {cart.length > 0 && (
                   <span className="bg-red-600 text-white text-xs rounded-full px-2 py-1 min-w-[20px] text-center">
                     {cart.length}
@@ -295,26 +319,26 @@ const ProductsDiscount = () => {
           </div>
 
           {/* Filters */}
-          <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-8">
+          <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4 sm:p-6 mb-6 sm:mb-8">
             <div className="flex flex-col lg:flex-row gap-4 lg:items-center lg:justify-between">
               {/* Search */}
               <div className="relative flex-1 max-w-md">
-                <Search size={20} className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+                <Search size={18} className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
                 <input
                   type="text"
                   placeholder="Cari produk diskon..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent outline-none"
+                  className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent outline-none text-sm sm:text-base"
                 />
               </div>
 
-              <div className="flex flex-wrap items-center gap-4">
+              <div className="flex flex-wrap items-center gap-2 sm:gap-4">
                 {/* Category Filter */}
                 <select
                   value={filters.category}
                   onChange={(e) => setFilters({ ...filters, category: e.target.value })}
-                  className="border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-red-500 focus:border-transparent outline-none"
+                  className="border border-gray-300 rounded-lg px-2 sm:px-3 py-2 focus:ring-2 focus:ring-red-500 focus:border-transparent outline-none text-xs sm:text-sm"
                 >
                   {categories.map(category => (
                     <option key={category} value={category}>
@@ -327,7 +351,7 @@ const ProductsDiscount = () => {
                 <select
                   value={filters.discountRange}
                   onChange={(e) => setFilters({ ...filters, discountRange: e.target.value })}
-                  className="border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-red-500 focus:border-transparent outline-none"
+                  className="border border-gray-300 rounded-lg px-2 sm:px-3 py-2 focus:ring-2 focus:ring-red-500 focus:border-transparent outline-none text-xs sm:text-sm"
                 >
                   <option value="all">Semua Diskon</option>
                   <option value="10-20">10% - 20%</option>
@@ -341,7 +365,7 @@ const ProductsDiscount = () => {
                 <select
                   value={filters.sortBy}
                   onChange={(e) => setFilters({ ...filters, sortBy: e.target.value })}
-                  className="border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-red-500 focus:border-transparent outline-none"
+                  className="border border-gray-300 rounded-lg px-2 sm:px-3 py-2 focus:ring-2 focus:ring-red-500 focus:border-transparent outline-none text-xs sm:text-sm"
                 >
                   <option value="discount">Diskon Tertinggi</option>
                   <option value="price">Harga Terendah</option>
@@ -355,13 +379,13 @@ const ProductsDiscount = () => {
                     onClick={() => setViewMode("grid")}
                     className={`p-2 ${viewMode === "grid" ? "bg-red-600 text-white" : "bg-white text-gray-600 hover:bg-gray-50"} transition-colors`}
                   >
-                    <Grid size={18} />
+                    <Grid size={16} />
                   </button>
                   <button
                     onClick={() => setViewMode("list")}
                     className={`p-2 ${viewMode === "list" ? "bg-red-600 text-white" : "bg-white text-gray-600 hover:bg-gray-50"} transition-colors`}
                   >
-                    <List size={18} />
+                    <List size={16} />
                   </button>
                 </div>
               </div>
@@ -369,13 +393,13 @@ const ProductsDiscount = () => {
           </div>
 
           {/* Results Info */}
-          <div className="flex items-center justify-between mb-6">
-            <p className="text-gray-600">
+          <div className="flex items-center justify-between mb-4 sm:mb-6">
+            <p className="text-gray-600 text-sm sm:text-base">
               Menampilkan {filteredProducts.length} produk diskon
             </p>
-            <div className="flex items-center gap-2 text-sm text-red-600 font-medium">
-              <TrendingDown size={16} />
-              <span>Harga sudah termasuk diskon</span>
+            <div className="flex items-center gap-2 text-xs sm:text-sm text-red-600 font-medium">
+              <TrendingDown size={14} />
+              <span className="hidden sm:inline">Harga sudah termasuk diskon</span>
             </div>
           </div>
 
@@ -394,7 +418,7 @@ const ProductsDiscount = () => {
             </div>
           ) : (
             <div className={viewMode === "grid" 
-              ? "grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6" 
+              ? "grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4 gap-3 sm:gap-6" 
               : "space-y-6"
             }>
               {filteredProducts.map((product, i) => (
@@ -404,20 +428,20 @@ const ProductsDiscount = () => {
                     className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-all duration-300 group relative"
                   >
                     {/* Badges */}
-                    <div className="absolute top-3 left-3 z-10 flex flex-col gap-2">
+                    <div className="absolute top-2 left-2 z-10 flex flex-col gap-1">
                       <div className="bg-red-600 text-white text-xs font-bold px-2 py-1 rounded-full">
                         -{product.discount}%
                       </div>
                       {product.isFlashSale && (
-                        <div className="bg-orange-500 text-white text-xs font-bold px-2 py-1 rounded-full flex items-center gap-1">
-                          <Flame size={10} />
-                          Flash Sale
+                        <div className="bg-orange-500 text-white text-xs font-bold px-1.5 py-0.5 rounded-full flex items-center gap-1">
+                          <Flame size={8} />
+                          <span className="hidden sm:inline">Flash</span>
                         </div>
                       )}
                       {product.isBestDeal && (
-                        <div className="bg-green-600 text-white text-xs font-bold px-2 py-1 rounded-full flex items-center gap-1">
-                          <Tag size={10} />
-                          Best Deal
+                        <div className="bg-green-600 text-white text-xs font-bold px-1.5 py-0.5 rounded-full flex items-center gap-1">
+                          <Tag size={8} />
+                          <span className="hidden sm:inline">Best</span>
                         </div>
                       )}
                     </div>
@@ -430,47 +454,48 @@ const ProductsDiscount = () => {
                       />
                     </div>
 
-                    <div className="p-6">
-                      <div className="mb-4">
+                    <div className="p-3 sm:p-6">
+                      <div className="mb-3 sm:mb-4">
                         {product.category && (
                           <span className="inline-block bg-gray-100 text-gray-600 text-xs font-medium px-2 py-1 rounded-full mb-2">
                             {product.category}
                           </span>
                         )}
-                        <h3 className="text-lg font-semibold text-gray-900 mb-2 line-clamp-2">
+                        <h3 className="text-sm sm:text-lg font-semibold text-gray-900 mb-2 line-clamp-2">
                           {product.title}
                         </h3>
                         
                         {/* Rating and Sold */}
-                        <div className="flex items-center gap-4 mb-3">
+                        <div className="flex items-center gap-2 sm:gap-4 mb-2 sm:mb-3">
                           <div className="flex items-center gap-1">
-                            <Star size={14} className="text-yellow-500 fill-current" />
-                            <span className="text-sm text-gray-600">{product.rating}</span>
+                            <Star size={12} className="text-yellow-500 fill-current" />
+                            <span className="text-xs sm:text-sm text-gray-600">{product.rating}</span>
                           </div>
-                          <div className="text-sm text-gray-500">
+                          <div className="text-xs sm:text-sm text-gray-500">
                             {product.sold} terjual
                           </div>
                         </div>
 
                         {/* Prices */}
-                        <div className="flex items-center gap-2 mb-2">
-                          <span className="text-2xl font-bold text-red-600">
+                        <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2 mb-2">
+                          <span className="text-lg sm:text-2xl font-bold text-red-600">
                             Rp {product.price.toLocaleString("id-ID")}
                           </span>
-                          <span className="text-sm text-gray-500 line-through">
+                          <span className="text-xs sm:text-sm text-gray-500 line-through">
                             Rp {product.originalPrice.toLocaleString("id-ID")}
                           </span>
                         </div>
                         
-                        <div className="text-sm text-green-600 font-medium">
+                        <div className="text-xs sm:text-sm text-green-600 font-medium">
                           Hemat Rp {calculateSavings(product.originalPrice, product.price).toLocaleString("id-ID")}
                         </div>
 
                         {/* Timer for Flash Sale */}
                         {product.timeLeft && (
-                          <div className="flex items-center gap-1 text-sm text-orange-600 mt-2">
-                            <Clock size={14} />
-                            <span>Berakhir dalam {product.timeLeft}</span>
+                          <div className="flex items-center gap-1 text-xs sm:text-sm text-orange-600 mt-2">
+                            <Clock size={12} />
+                            <span className="hidden sm:inline">Berakhir dalam {product.timeLeft}</span>
+                            <span className="sm:hidden">{product.timeLeft}</span>
                           </div>
                         )}
                       </div>
@@ -478,15 +503,17 @@ const ProductsDiscount = () => {
                       <div className="space-y-2">
                         <button
                           onClick={() => handleDetail(product.id)}
-                          className="w-full bg-red-600 hover:bg-red-700 text-white py-2.5 px-4 rounded-lg font-medium transition-colors"
+                          className="w-full bg-red-600 hover:bg-red-700 text-white py-2 sm:py-2.5 px-2 sm:px-4 rounded-lg font-medium transition-colors text-xs sm:text-sm"
                         >
-                          Lihat Detail
+                          <span className="hidden sm:inline">Lihat Detail</span>
+                          <span className="sm:hidden">Detail</span>
                         </button>
                         <button
                           onClick={() => handleAddToCart(product.id)}
-                          className="w-full bg-white border border-red-600 text-red-600 hover:bg-red-50 py-2.5 px-4 rounded-lg font-medium transition-colors"
+                          className="w-full bg-white border border-red-600 text-red-600 hover:bg-red-50 py-2 sm:py-2.5 px-2 sm:px-4 rounded-lg font-medium transition-colors text-xs sm:text-sm"
                         >
-                          Tambah ke Keranjang
+                          <span className="hidden sm:inline">Tambah ke Keranjang</span>
+                          <span className="sm:hidden">+ Keranjang</span>
                         </button>
                       </div>
                     </div>
@@ -494,9 +521,9 @@ const ProductsDiscount = () => {
                 ) : (
                   <div
                     key={product.id}
-                    className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow duration-300 relative"
+                    className="bg-white rounded-lg shadow-sm border border-gray-200 p-4 sm:p-6 hover:shadow-md transition-shadow duration-300 relative"
                   >
-                    <div className="flex flex-col md:flex-row gap-6">
+                    <div className="flex flex-col md:flex-row gap-4 sm:gap-6">
                       <div className="relative">
                         <div className="w-full md:w-48 aspect-square overflow-hidden bg-gray-50 rounded-lg flex-shrink-0">
                           <img
@@ -527,14 +554,14 @@ const ProductsDiscount = () => {
                               {product.category}
                             </span>
                           )}
-                          <h3 className="text-xl font-semibold text-gray-900 mb-2">
+                          <h3 className="text-lg sm:text-xl font-semibold text-gray-900 mb-2">
                             {product.title}
                           </h3>
-                          <p className="text-gray-600 mb-4 line-clamp-2">
+                          <p className="text-gray-600 mb-4 line-clamp-2 text-sm sm:text-base">
                             {product.description || "Deskripsi produk akan ditampilkan di sini."}
                           </p>
                           
-                          <div className="flex items-center gap-6 mb-4">
+                          <div className="flex items-center gap-4 sm:gap-6 mb-4">
                             <div className="flex items-center gap-1">
                               <Star size={16} className="text-yellow-500 fill-current" />
                               <span className="text-gray-600">{product.rating}</span>
@@ -545,10 +572,10 @@ const ProductsDiscount = () => {
                           </div>
 
                           <div className="flex items-center gap-3 mb-2">
-                            <span className="text-3xl font-bold text-red-600">
+                            <span className="text-2xl sm:text-3xl font-bold text-red-600">
                               Rp {product.price.toLocaleString("id-ID")}
                             </span>
-                            <span className="text-lg text-gray-500 line-through">
+                            <span className="text-base sm:text-lg text-gray-500 line-through">
                               Rp {product.originalPrice.toLocaleString("id-ID")}
                             </span>
                           </div>
@@ -568,15 +595,16 @@ const ProductsDiscount = () => {
                         <div className="flex gap-3">
                           <button
                             onClick={() => handleDetail(product.id)}
-                            className="flex-1 bg-red-600 hover:bg-red-700 text-white py-2.5 px-6 rounded-lg font-medium transition-colors"
+                            className="flex-1 bg-red-600 hover:bg-red-700 text-white py-2.5 px-4 sm:px-6 rounded-lg font-medium transition-colors text-sm sm:text-base"
                           >
                             Lihat Detail
                           </button>
                           <button
                             onClick={() => handleAddToCart(product.id)}
-                            className="flex-1 bg-white border border-red-600 text-red-600 hover:bg-red-50 py-2.5 px-6 rounded-lg font-medium transition-colors"
+                            className="flex-1 bg-white border border-red-600 text-red-600 hover:bg-red-50 py-2.5 px-4 sm:px-6 rounded-lg font-medium transition-colors text-sm sm:text-base"
                           >
-                            Tambah ke Keranjang
+                            <span className="hidden sm:inline">Tambah ke Keranjang</span>
+                            <span className="sm:hidden">+ Keranjang</span>
                           </button>
                         </div>
                       </div>

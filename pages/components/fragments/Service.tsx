@@ -1,5 +1,5 @@
 'use client';
-
+import Swal from 'sweetalert2';
 import { useRouter } from 'next/navigation';
 
 const Services = () => {
@@ -45,11 +45,19 @@ const Services = () => {
     },
   ];
 
-  const handleClick = (link?: string) => {
-    if (link) {
-      router.push(link);
-    }
-  };
+
+const handleClick = (link?: string) => {
+  if (link) {
+    router.push(link);
+  } else {
+    Swal.fire({
+      icon: 'info',
+      title: 'Layanan Belum Tersedia',
+      text: 'Mohon maaf, layanan ini masih dalam pengembangan.',
+      confirmButtonColor: '#3b82f6', // warna biru
+    });
+  }
+};
 
   return (
     <section className="bg-white py-24 px-4 md:px-16" id="layanan-kami">

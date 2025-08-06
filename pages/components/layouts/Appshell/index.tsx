@@ -22,7 +22,8 @@ const AppShell = ({ children }: AppshellProps) => {
   const isSpecialPage =
     pathname === '/login' ||
     pathname === '/register' ||
-    pathname === '/404';
+    pathname === '/404' ||
+    pathname === '/admin'; 
 
   return (
     <div className="min-h-screen flex flex-col">

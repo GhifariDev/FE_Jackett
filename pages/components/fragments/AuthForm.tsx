@@ -6,6 +6,7 @@ import Cookies from 'js-cookie';
 import Button from '../elements/Button';
 import Link from 'next/link';
 import { LoginData, RegisterData } from '@/types/auth';
+import Swal from 'sweetalert2';
 
 interface Props {
   mode: 'login' | 'register';
@@ -13,8 +14,6 @@ interface Props {
 
 export default function AuthForm({ mode }: Props) {
   const [form, setForm] = useState<Partial<RegisterData>>({});
-  const [error, setError] = useState('');
-  const [success, setSuccess] = useState('');
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -38,15 +37,29 @@ export default function AuthForm({ mode }: Props) {
         Cookies.set('token', token, { expires: 7 });
         Cookies.set('user_email', user.email);
         Cookies.set('user_name', user.name);
+
+        await Swal.fire({
+          icon: 'success',
+          title: 'Login berhasil!',
+          showConfirmButton: false,
+          timer: 1500,
+        });
+
         window.location.href = '/';
       } else {
-        setSuccess(data.message || 'Registrasi berhasil');
+        await Swal.fire({
+          icon: 'success',
+          title: 'Registrasi berhasil!',
+          showConfirmButton: false,
+          timer: 1500,
+        });
       }
-
-      setError('');
     } catch (err: any) {
-      setError(err.message || 'Terjadi kesalahan');
-      setSuccess('');
+      Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: err.message || 'Terjadi kesalahan!',
+      });
     }
   };
 
@@ -70,10 +83,6 @@ export default function AuthForm({ mode }: Props) {
           <Input name="email" label="Email" type="email" onChange={handleChange} />
           <Input name="password" label="Password" type="password" onChange={handleChange} />
         </div>
-
-        {/* Error & Success */}
-        {error && <p className="text-red-500 mt-2 text-sm text-center">{error}</p>}
-        {success && <p className="text-green-600 mt-2 text-sm text-center">{success}</p>}
 
         {/* Button */}
         <Button
@@ -110,15 +119,13 @@ export default function AuthForm({ mode }: Props) {
         </div>
 
         {/* Google Button */}
-        {/* Google Button */}
         <button
-          onClick={() => alert('Login dengan Google belum tersedia')}
+          onClick={() => Swal.fire('Fitur belum tersedia', 'Login dengan Google belum aktif.', 'info')}
           className="w-full flex items-center justify-center border border-gray-300 rounded-md py-2 hover:bg-gray-100 transition"
         >
           <img src="/google-logo.png" alt="Google" className="w-5 h-5 mr-2" />
           <span className="text-sm text-gray-700">Sign in with Google</span>
         </button>
-
       </div>
     </div>
   );

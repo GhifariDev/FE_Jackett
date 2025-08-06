@@ -64,8 +64,29 @@ const AllProducts = () => {
     setFilteredProducts(filtered);
   };
 
-  const handleAddToCart = (id: number) => {
-    setCart((prevCart) => [...prevCart, id]);
+  // Tambahkan produk ke keranjang
+  const handleAddToCart = async (productId: number) => {
+    try {
+      const response = await fetch("http://localhost:3001/api/cart", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include", // ⬅️ Penting: agar cookie JWT ikut terkirim
+        body: JSON.stringify({ productId, quantity: 1 }),
+      });
+
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.message || "Gagal menambahkan ke keranjang");
+      }
+
+      setCart((prevCart) => [...prevCart, productId]);
+      alert("✅ Produk berhasil ditambahkan ke keranjang");
+    } catch (error: any) {
+      console.error("❌ Gagal tambah ke keranjang:", error.message);
+      alert("Gagal menambahkan produk: " + error.message);
+    }
   };
 
   const handleDetail = (id: number) => {
