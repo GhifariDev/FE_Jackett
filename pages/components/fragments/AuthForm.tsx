@@ -14,6 +14,7 @@ interface Props {
 
 export default function AuthForm({ mode }: Props) {
   const [form, setForm] = useState<Partial<RegisterData>>({});
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -22,7 +23,7 @@ export default function AuthForm({ mode }: Props) {
   const handleSubmit = async () => {
     try {
       const endpoint = mode === 'login' ? '/api/login' : '/api/register';
-      const res = await fetch(`https://feaea59b-29c1-410d-876c-82ef3311a0c5-00-2j44gkrr7d6ab.pike.replit.dev${endpoint}`, {
+      const res = await fetch(`${API_URL}${endpoint}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',

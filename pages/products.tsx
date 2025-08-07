@@ -24,6 +24,11 @@ const AllProducts = () => {
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
   const [loading, setLoading] = useState(true);
   const router = useRouter();
+  const API_URL = process.env.NEXT_PUBLIC_API_URL;
+  const getImageUrl = (filename?: string) => {
+    if (!filename) return "https://source.unsplash.com/400x400/?product";
+    return `${API_URL}/uploads/${filename}`;
+  };
 
   useEffect(() => {
     AOS.init({ duration: 800, once: true });
@@ -37,7 +42,7 @@ const AllProducts = () => {
   const fetchProducts = async () => {
     try {
       setLoading(true);
-      const response = await fetch("https://feaea59b-29c1-410d-876c-82ef3311a0c5-00-2j44gkrr7d6ab.pike.replit.dev/api/products");
+      const response = await fetch(`${API_URL}/api/products`);
       const data = await response.json();
       setProducts(data);
       setFilteredProducts(data);
@@ -68,15 +73,15 @@ const AllProducts = () => {
 
   // Tambahkan produk ke keranjang
   const handleAddToCart = async (productId: number) => {
-      const token = Cookies.get('token'); // atau cara cek login lain (zustand, context, dsb)
+    const token = Cookies.get('token'); // atau cara cek login lain (zustand, context, dsb)
 
-  if (!token) {
-    alert("Silakan login terlebih dahulu untuk menambahkan ke keranjang.");
-    router.push('/login');
-    return;
-  }
+    if (!token) {
+      alert("Silakan login terlebih dahulu untuk menambahkan ke keranjang.");
+      router.push('/login');
+      return;
+    }
     try {
-      const response = await fetch("https://feaea59b-29c1-410d-876c-82ef3311a0c5-00-2j44gkrr7d6ab.pike.replit.dev/api/cart", {
+      const response = await fetch(`${API_URL}/api/cart`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -104,7 +109,7 @@ const AllProducts = () => {
 
   const categories = ["all", ...new Set(products.map(p => p.category).filter(Boolean))];
 
-  
+
   if (loading) {
     return (
       <section className="bg-gray-50 mt-60 min-h-screen py-12 px-6">
@@ -229,8 +234,8 @@ const AllProducts = () => {
             </p>
           </div>
         ) : (
-          <div className={viewMode === "grid" 
-            ? "grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6" 
+          <div className={viewMode === "grid"
+            ? "grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6"
             : "space-y-4"
           }>
             {filteredProducts.map((product, i) => (
@@ -243,7 +248,7 @@ const AllProducts = () => {
                 >
                   <div className="aspect-square overflow-hidden bg-gray-50">
                     <img
-                      src={product.imageUrl || "https://source.unsplash.com/400x400/?product"}
+                      src={getImageUrl(product.imageUrl)} 
                       alt={product.title}
                       className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                     />
@@ -288,10 +293,11 @@ const AllProducts = () => {
                   <div className="flex flex-col md:flex-row gap-6">
                     <div className="w-full md:w-48 aspect-square overflow-hidden bg-gray-50 rounded-lg flex-shrink-0">
                       <img
-                        src={product.imageUrl || "https://source.unsplash.com/400x400/?product"}
+                        src={getImageUrl(product.imageUrl)}
                         alt={product.title}
                         className="w-full h-full object-cover"
                       />
+
                     </div>
                     <div className="flex-1 flex flex-col justify-between">
                       <div>

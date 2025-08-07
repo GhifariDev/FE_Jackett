@@ -7,11 +7,12 @@ import ReviewForm from './components/fragments/RivewsForm';
 
 export default function OurCompanyReview() {
   const router = useRouter();
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
   useEffect(() => {
     const checkLogin = async () => {
       try {
-        const res = await axios.get('http://localhost:3001/api/check', {
+        const res = await axios.get(`${API_URL}/api/check`, {
           withCredentials: true, // Cookie akan ikut terkirim
         });
 

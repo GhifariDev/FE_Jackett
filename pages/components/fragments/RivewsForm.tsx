@@ -9,6 +9,7 @@ const ReviewForm = () => {
   const [rating, setRating] = useState(5);
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -16,7 +17,7 @@ const ReviewForm = () => {
     setSuccess(false);
 
     try {
-      await axios.post('https://feaea59b-29c1-410d-876c-82ef3311a0c5-00-2j44gkrr7d6ab.pike.replit.dev/api/review/company', {
+      await axios.post(`${API_URL}/api/review/company`, {
         content,
         rating
       }, { withCredentials: true }); // kirim cookie JWT juga

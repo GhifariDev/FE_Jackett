@@ -68,6 +68,7 @@ const AboutJaxel: React.FC = () => {
   const [reviews, setReviews] = useState<Review[]>([]);
   const [loadingReviews, setLoadingReviews] = useState(true);
   const [errorReviews, setErrorReviews] = useState<string | null>(null);
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
   useEffect(() => {
     AOS.init({ duration: 800, once: true });
@@ -99,7 +100,7 @@ const AboutJaxel: React.FC = () => {
     const timer = setTimeout(animateNumbers, 1000);
 
     // Fetch reviews
-    fetch('https://feaea59b-29c1-410d-876c-82ef3311a0c5-00-2j44gkrr7d6ab.pike.replit.dev/api/review/companys')
+    fetch(`${API_URL}/api/review/companys`)
       .then(res => {
         if (!res.ok) throw new Error('Gagal memuat ulasan');
         return res.json();

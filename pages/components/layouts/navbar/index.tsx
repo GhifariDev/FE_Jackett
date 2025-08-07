@@ -7,11 +7,15 @@ import { ShoppingCart } from "lucide-react";
 
 const Navbar = () => {
   const [userName, setUserName] = useState("");
+  const [userRole, setUserRole] = useState(""); // ⬅️ Tambahkan state untuk role
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-const totalItems = (useCartStore((state) => state.items) || []).reduce(
-  (acc, item) => acc + item.quantity,
-  0
-);
+  const API_URL = process.env.NEXT_PUBLIC_API_URL;
+
+  const totalItems = (useCartStore((state) => state.items) || []).reduce(
+    (acc, item) => acc + item.quantity,
+    0
+  );
+
   useEffect(() => {
     const getCookie = (name: string): string | undefined => {
       const value = `; ${document.cookie}`;
@@ -20,16 +24,17 @@ const totalItems = (useCartStore((state) => state.items) || []).reduce(
     };
 
     const name = getCookie("user_name");
-    if (name) {
-      setUserName(decodeURIComponent(name));
-    }
+    const role = getCookie("user_role");
+
+    if (name) setUserName(decodeURIComponent(name));
+    if (role) setUserRole(decodeURIComponent(role));
   }, []);
 
   const handleLogout = async () => {
     try {
-      await fetch('https://feaea59b-29c1-410d-876c-82ef3311a0c5-00-2j44gkrr7d6ab.pike.replit.dev/api/logout', {
+      await fetch(`${API_URL}/api/logout`, {
         method: 'POST',
-        credentials: 'include', // ← WAJIB! agar cookie dikirim ke BE
+        credentials: 'include',
       });
       window.location.href = '/login';
     } catch (error) {
@@ -44,13 +49,11 @@ const totalItems = (useCartStore((state) => state.items) || []).reduce(
       <nav className="bg-white shadow-md fixed w-full top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-10">
           <div className="flex items-center justify-between h-16">
-            {/* Logo */}
             <div className="flex items-center space-x-2">
               <img src="/logo.svg" alt="Logo" className="h-8 w-auto" />
               <span className="font-bold text-gray-800 text-lg">JAXEL</span>
             </div>
 
-            {/* Desktop Links */}
             <div className="hidden md:flex items-center space-x-6">
               <a href="/" className="text-sm text-gray-700 hover:text-green-700 font-medium transition-colors">HOME</a>
               <a href="/products" className="text-sm text-gray-700 hover:text-green-700 font-medium transition-colors">PRODUCTS</a>
@@ -63,11 +66,16 @@ const totalItems = (useCartStore((state) => state.items) || []).reduce(
               />
             </div>
 
-            {/* Right side: Desktop */}
             <div className="hidden md:flex items-center space-x-6">
               <a href="/cart" className="text-gray-700 hover:text-green-700 transition-colors">
                 <FaShoppingCart size={20} />
               </a>
+
+              {userRole === "admin" && (
+                <a href="/AdminPage" className="text-sm text-red-600 hover:text-red-800 font-medium transition-colors">
+                  Admin Dashboard
+                </a>
+              )}
 
               {userName ? (
                 <div className="relative group">
@@ -89,7 +97,6 @@ const totalItems = (useCartStore((state) => state.items) || []).reduce(
               )}
             </div>
 
-            {/* Hamburger Button (Mobile) */}
             <div className="md:hidden">
               <button onClick={toggleMenu} className="text-gray-700 focus:outline-none hover:text-green-700 transition-colors">
                 {isMenuOpen ? <FaTimes size={20} /> : <FaBars size={20} />}
@@ -98,15 +105,19 @@ const totalItems = (useCartStore((state) => state.items) || []).reduce(
           </div>
         </div>
 
-        {/* Mobile Menu */}
-        <div className={`md:hidden transition-all duration-300 ease-in-out ${isMenuOpen ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0 overflow-hidden'
-          }`}>
+        <div className={`md:hidden transition-all duration-300 ease-in-out ${isMenuOpen ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0 overflow-hidden'}`}>
           <div className="px-4 pt-2 pb-4 space-y-2 bg-white border-t border-gray-200">
             <a href="/" className="block py-2 text-sm text-gray-700 hover:text-green-700 hover:bg-gray-50 rounded px-2 transition-colors">HOME</a>
             <a href="/products" className="block py-2 text-sm text-gray-700 hover:text-green-700 hover:bg-gray-50 rounded px-2 transition-colors">PRODUCTS</a>
-            <a href="product-discount" className="block py-2 text-sm text-gray-700 hover:text-green-700 hover:bg-gray-50 rounded px-2 transition-colors">PRODUCTS DISCOUNT</a>
+            <a href="/product-discount" className="block py-2 text-sm text-gray-700 hover:text-green-700 hover:bg-gray-50 rounded px-2 transition-colors">PRODUCTS DISCOUNT</a>
             <a href="/aboutJaxel" className="block py-2 text-sm text-gray-700 hover:text-green-700 hover:bg-gray-50 rounded px-2 transition-colors">ABOUT JAXEL</a>
             <a href="/riviewskami" className="block py-2 text-sm text-gray-700 hover:text-green-700 hover:bg-gray-50 rounded px-2 transition-colors">KIRIM ULASAN *harus login </a>
+
+            {userRole === "admin" && (
+              <a href="/AdminPage" className="block py-2 text-sm text-red-600 hover:text-red-800 hover:bg-red-50 rounded px-2 transition-colors">
+                Admin Dashboard
+              </a>
+            )}
 
             <div className="pt-2">
               <input
@@ -139,7 +150,6 @@ const totalItems = (useCartStore((state) => state.items) || []).reduce(
         </div>
       </nav>
 
-      {/* Spacer untuk fixed navbar */}
       <div className="h-16"></div>
     </>
   );

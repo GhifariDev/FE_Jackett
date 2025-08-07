@@ -32,7 +32,7 @@ export default function CartPage() {
 useEffect(() => {
   const fetchProducts = async () => {
     const items: DisplayCartItem[] = [];
-
+    
     for (const item of cartItems) {
       try {
         const product = await apiFetch(`/api/products/${item.productId}`);

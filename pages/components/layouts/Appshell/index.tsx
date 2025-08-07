@@ -23,7 +23,7 @@ const AppShell = ({ children }: AppshellProps) => {
     pathname === '/login' ||
     pathname === '/register' ||
     pathname === '/404' ||
-    pathname === '/admin'; 
+    pathname === '/AdminPage'; 
 
   return (
     <div className="min-h-screen flex flex-col">
