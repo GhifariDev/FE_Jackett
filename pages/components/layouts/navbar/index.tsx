@@ -27,7 +27,7 @@ const totalItems = (useCartStore((state) => state.items) || []).reduce(
 
   const handleLogout = async () => {
     try {
-      await fetch('http://localhost:3001/api/logout', {
+      await fetch('https://feaea59b-29c1-410d-876c-82ef3311a0c5-00-2j44gkrr7d6ab.pike.replit.dev/api/logout', {
         method: 'POST',
         credentials: 'include', // ← WAJIB! agar cookie dikirim ke BE
       });
