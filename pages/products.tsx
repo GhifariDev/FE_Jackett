@@ -76,7 +76,7 @@ const AllProducts = () => {
     return;
   }
     try {
-      const response = await fetch("http://localhost:3001/api/cart", {
+      const response = await fetch("https://feaea59b-29c1-410d-876c-82ef3311a0c5-00-2j44gkrr7d6ab.pike.replit.dev/api/cart", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
