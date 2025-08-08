@@ -42,7 +42,7 @@ export default function ProductList() {
       {products.map((product) => (
         <div key={product.id} className="border rounded-xl p-4 shadow">
           <h3 className="text-lg font-semibold">{product.title}</h3>
-          <p className="text-sm text-gray-500">{product.category}</p>
+          <p className="text-sm text-gray-600">{product.category}</p>
           <p className="text-gray-700 mt-1">Rp {product.price.toLocaleString()}</p>
           {product.imageUrl && (
             <img
