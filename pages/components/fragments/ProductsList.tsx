@@ -35,7 +35,7 @@ export default function ProductList() {
     fetchProducts();
   }, []);
 
-  if (loading) return <p>Loading...</p>;
+  if (loading) return <p>Loadingg...</p>;
 
   return (
     <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
