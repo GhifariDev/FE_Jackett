@@ -26,7 +26,7 @@ export default function ProductList() {
         const data = await res.json();
         setProducts(data.products || []);
       } catch (error) {
-        console.error("Gagal fetch produk:", error);
+        console.error("Gagal fetchh produk:", error);
       } finally {
         setLoading(false);
       }
