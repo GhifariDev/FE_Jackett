@@ -52,7 +52,7 @@ const getSellerName = (product: Product): string | undefined => {
   // Coba berbagai kemungkinan struktur data
   const candidates = [
     product.seller?.nama,           // Standard structure
-    product.seller?.name,           // Alternative name field
+    product.seller?.nama,           // Alternative name field
     product.user?.nama,             // If using 'user' instead of 'seller'
     product.user?.name,             // Alternative name field in user
     product.seller_name,            // Direct field from JOIN
@@ -567,7 +567,7 @@ export default function AdminProductsPage() {
       
     } catch (error) {
       console.error("Error handling action:", error);
-      alert(`Gagal ${action === 'approve' ? 'approve' : 'reject'} produk: ${error.message}`);
+      alert(`Gagal ${action === 'approve' ? 'approve' : 'reject'} `);
     } finally {
       setActionLoading(null);
       setSelectedProduct(null);
