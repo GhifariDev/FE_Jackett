@@ -1,11 +1,11 @@
 "use client";
 
 import { useEffect, useState, useCallback } from "react";
-import AdminProductForm from "./components/fragments/AdminProductForm";
+import AdminProductForm from "../components/fragments/AdminProductForm";
 import { useRouter } from "next/navigation";
-import UsersPage from "./components/fragments/admin/User";
-import Analytics from "./components/fragments/admin/Analistik";
-import ApprovalProduct from "./components/fragments/admin/ApprovalProduct";
+import UsersPage from "../components/fragments/admin/User";
+import Analytics from "../components/fragments/admin/Analistik";
+import ApprovalProduct from "../components/fragments/admin/ApprovalProduct";
 // import SellerApproval from "./components/fragments/admin/SellerApproval";
 
 export default function AdminPage() {

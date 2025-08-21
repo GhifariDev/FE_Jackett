@@ -27,7 +27,7 @@ import AOS from 'aos';
 import 'aos/dist/aos.css';
 
 // Import komponen
-import ImageGallery from './components/fragments/ImageGalery';
+import ImageGallery from '../components/fragments/ImageGalery';
 
 interface FormData {
   title: string;

@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import axios, { AxiosError } from 'axios';
-import ReviewForm from './components/fragments/RivewsForm';
+import ReviewForm from '../components/fragments/RivewsForm';
 
 // Types
 interface User {
