@@ -203,7 +203,7 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL;
   return (
     <div className="bg-white">
       {/* Hero Section */}
-      <section className="relative bg-gradient-to-r from-gray-900 via-gray-800 to-black text-white py-24">
+      {/* <section className="relative bg-gradient-to-r from-gray-900 via-gray-800 to-black text-white py-24">
         <div className="absolute inset-0 bg-gradient-to-b from-transparent via-black/10 to-black/30"></div>
         <div className="relative max-w-7xl mx-auto px-6 text-center">
           <h1 
@@ -226,10 +226,10 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL;
             </div>
           </div>
         </div>
-      </section>
+      </section> */}
 
       {/* Stats Section */}
-      <section className="py-20 bg-gray-50">
+      {/* <section className="py-20 bg-gray-50">
         <div className="max-w-7xl mx-auto px-6">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
             <div className="text-center" data-aos="fade-up" data-aos-delay="0">
@@ -258,7 +258,7 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL;
             </div>
           </div>
         </div>
-      </section>
+      </section> */}
 
       {/* Mission & Vision */}
       <section className="py-20">
@@ -535,7 +535,7 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL;
       </section>
 
       {/* Contact Section */}
-      <section className="py-20 bg-gradient-to-r from-gray-900 via-gray-800 to-black text-white relative overflow-hidden">
+      {/* <section className="py-20 bg-gradient-to-r from-gray-900 via-gray-800 to-black text-white relative overflow-hidden">
         <div className="max-w-7xl mx-auto px-6 flex flex-col md:flex-row gap-12 md:gap-24 items-center justify-between">
           <div className="max-w-md" data-aos="fade-right">
             <h2 className="text-4xl font-bold mb-6">Hubungi Kami</h2>
@@ -574,7 +574,7 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL;
             />
           </div>
         </div>
-      </section>
+      </section> */}
     </div>
   );
 };

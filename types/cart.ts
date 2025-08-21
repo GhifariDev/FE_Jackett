@@ -1,8 +1,17 @@
 // types/cart.ts
 export interface CartItem {
   productId: number;
-  name: string;
+  quantity: number;
+}
+
+export interface Product {
+  id: number;
+  title: string;
   price: number;
   imageUrl: string;
+}
+
+export interface DisplayCartItem {
+  product: Product;
   quantity: number;
 }

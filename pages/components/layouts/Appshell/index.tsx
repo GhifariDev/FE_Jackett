@@ -23,6 +23,7 @@ const AppShell = ({ children }: AppshellProps) => {
     pathname === '/login' ||
     pathname === '/register' ||
     pathname === '/404' ||
+     pathname === '/profile' ||
     pathname === '/AdminPage'; 
 
   return (

@@ -5,23 +5,73 @@ import Input from '../elements/Input';
 import Cookies from 'js-cookie';
 import Button from '../elements/Button';
 import Link from 'next/link';
-import { LoginData, RegisterData } from '@/types/auth';
 import Swal from 'sweetalert2';
 
-interface Props {
-  mode: 'login' | 'register';
+interface AuthFormProps {
+  mode: 'login' | 'register' | 'otp';
 }
 
-export default function AuthForm({ mode }: Props) {
-  const [form, setForm] = useState<Partial<RegisterData>>({});
-const API_URL = process.env.NEXT_PUBLIC_API_URL;
+// Field form untuk semua mode
+interface FormData {
+  name?: string;
+  email?: string;
+  password?: string;
+  phone?: string;
+  otp?: string;
+}
+
+export default function AuthForm({ mode }: AuthFormProps) {
+  const [form, setForm] = useState<FormData>({});
+  const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
+  // Kirim OTP
+  const handleRequestOTP = async () => {
+    if (!form.phone) {
+      Swal.fire('Error', 'Nomor HP wajib diisi', 'error');
+      return;
+    }
+
+    try {
+      const res = await fetch(`${API_URL}/api/otp/request`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ phone: form.phone }),
+      });
+      const data: { message: string } = await res.json();
+      if (!res.ok) throw new Error(data.message);
+      Swal.fire('OTP dikirim!', data.message, 'success');
+    } catch (err: any) {
+      Swal.fire('Error', err.message || 'Terjadi kesalahan', 'error');
+    }
+  };
+
+  // Submit form register/login
   const handleSubmit = async () => {
     try {
+      if (mode === 'otp') {
+        if (!form.phone || !form.otp) {
+          Swal.fire('Error', 'Nomor HP dan OTP wajib diisi', 'error');
+          return;
+        }
+        const res = await fetch(`${API_URL}/api/otp/verify`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ phone: form.phone, code: form.otp }),
+        });
+        const data: { token: string; message?: string } = await res.json();
+        if (!res.ok) throw new Error(data.message || 'OTP salah');
+
+        Cookies.set('token', data.token, { expires: 7 });
+        Swal.fire('Login berhasil!', '', 'success');
+        window.location.href = '/';
+        return;
+      }
+
+      // Login/Register biasa
       const endpoint = mode === 'login' ? '/api/login' : '/api/register';
       const res = await fetch(`${API_URL}${endpoint}`, {
         method: 'POST',
@@ -29,9 +79,8 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL;
         credentials: 'include',
         body: JSON.stringify(form),
       });
-
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.message || data.error || 'Terjadi kesalahan');
+      const data: any = await res.json();
+      if (!res.ok) throw new Error(data.message || 'Terjadi kesalahan');
 
       if (mode === 'login') {
         const { token, user } = data;
@@ -39,61 +88,59 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL;
         Cookies.set('user_email', user.email);
         Cookies.set('user_name', user.name);
 
-        await Swal.fire({
-          icon: 'success',
-          title: 'Login berhasil!',
-          showConfirmButton: false,
-          timer: 1500,
-        });
-
+        Swal.fire({ icon: 'success', title: 'Login berhasil!', showConfirmButton: false, timer: 1500 });
         window.location.href = '/';
       } else {
-        await Swal.fire({
-          icon: 'success',
-          title: 'Registrasi berhasil!',
-          showConfirmButton: false,
-          timer: 1500,
-        });
+        Swal.fire({ icon: 'success', title: 'Registrasi berhasil!', showConfirmButton: false, timer: 1500 });
       }
     } catch (err: any) {
-      Swal.fire({
-        icon: 'error',
-        title: 'Oops...',
-        text: err.message || 'Terjadi kesalahan!',
-      });
+      Swal.fire({ icon: 'error', title: 'Oops...', text: err.message || 'Terjadi kesalahan!' });
     }
   };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-white px-4">
       <div className="w-full max-w-md bg-white p-8 rounded-xl shadow-md border">
-        {/* Logo dan Heading */}
         <div className="text-center mb-8">
           <div className="flex justify-center items-center gap-2 mb-1">
             <img src="/logo.svg" alt="Logo" className="w-6 h-6" />
             <h1 className="text-xl font-bold text-black">Jaxel Fillament</h1>
           </div>
-          <p className="text-sm text-gray-600">Silahkan {mode === 'login' ? 'Login' : 'Register'}</p>
+          <p className="text-sm text-gray-600">
+            Silahkan {mode === 'login' ? 'Login' : mode === 'register' ? 'Register' : 'Login dengan OTP'}
+          </p>
         </div>
 
         {/* Form */}
         <div className="space-y-4">
-          {mode === 'register' && (
-            <Input name="name" label="Nama Lengkap" onChange={handleChange} />
+          {mode === 'register' && <Input name="name" label="Nama Lengkap" onChange={handleChange} />}
+          {(mode === 'register' || mode === 'login') && (
+            <>
+              <Input name="email" label="Email" type="email" onChange={handleChange} />
+              <Input name="password" label="Password" type="password" onChange={handleChange} />
+            </>
           )}
-          <Input name="email" label="Email" type="email" onChange={handleChange} />
-          <Input name="password" label="Password" type="password" onChange={handleChange} />
+          {(mode === 'otp' || mode === 'register') && (
+            <Input name="phone" label="Nomor HP" onChange={handleChange} />
+          )}
+          {mode === 'otp' && <Input name="otp" label="Masukkan OTP" onChange={handleChange} />}
         </div>
 
-        {/* Button */}
+        {/* Buttons */}
+        {mode === 'otp' && (
+          <Button onClick={handleRequestOTP} className="bg-green-500 hover:bg-green-600 mt-6 w-full py-3 rounded-md text-white font-semibold">
+            Kirim OTP
+          </Button>
+        )}
+
         <Button
           onClick={handleSubmit}
-          className="bg-blue-500 hover:bg-blue-600 mt-10 text-white font-semibold w-full mt-6 py-3 rounded-md"
+          className="bg-blue-500 hover:bg-blue-600 mt-4 text-white font-semibold w-full py-3 rounded-md"
         >
-          {mode === 'login' ? 'Login' : 'Daftar'}
+          {mode === 'login' ? 'Login' : mode === 'register' ? 'Daftar' : 'Verifikasi OTP'}
         </Button>
 
-        {/* Link Daftar / Login */}
+        {/* Links */}
         <div className="text-sm text-center mt-4">
           {mode === 'login' ? (
             <>
@@ -102,31 +149,15 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL;
                 Daftar
               </Link>
             </>
-          ) : (
+          ) : mode === 'register' ? (
             <>
               Sudah punya akun?{' '}
               <Link href="/login" className="text-blue-600 hover:underline font-medium">
                 Login
               </Link>
             </>
-          )}
+          ) : null}
         </div>
-
-        {/* Atau */}
-        <div className="flex items-center justify-center my-4">
-          <span className="w-full h-px bg-gray-300" />
-          <span className="px-3 text-sm text-gray-500">or</span>
-          <span className="w-full h-px bg-gray-300" />
-        </div>
-
-        {/* Google Button */}
-        <button
-          onClick={() => Swal.fire('Fitur belum tersedia', 'Login dengan Google belum aktif.', 'info')}
-          className="w-full flex items-center justify-center border border-gray-300 rounded-md py-2 hover:bg-gray-100 transition"
-        >
-          <img src="/google-logo.png" alt="Google" className="w-5 h-5 mr-2" />
-          <span className="text-sm text-gray-700">Sign in with Google</span>
-        </button>
       </div>
     </div>
   );

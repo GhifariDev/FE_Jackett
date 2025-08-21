@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 
 interface ProductFormProps {
   product?: any;
@@ -9,21 +9,60 @@ interface ProductFormProps {
 
 export default function AdminProductForm({ product, onSubmitSuccess }: ProductFormProps) {
   const [form, setForm] = useState({
-    title: product?.title || "",
-    description: product?.description || "",
-    price: product?.price || "",
-    category: product?.category || "",
-    stock: product?.stock || "",
+    title: "",
+    description: "",
+    price: "",
+    category: "",
+    stock: "",
   });
   const [image, setImage] = useState<File | null>(null);
   const [loading, setLoading] = useState(false);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
-
+  const [existingImages, setExistingImages] = useState<string[]>([]);
+  
+  // Use ref to track last processed product ID to prevent infinite loops
+  const lastProductIdRef = useRef<number | null>(null);
   const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
-  // Update form when product prop changes
+  // Helper functions for image URL handling
+  const getImageUrls = (imageUrl: string) => {
+    if (!imageUrl) return [];
+    
+    try {
+      const imageArray = JSON.parse(imageUrl);
+      return Array.isArray(imageArray) ? imageArray : [imageUrl];
+    } catch (error) {
+      return [imageUrl];
+    }
+  };
+
+  const getImagePath = (filename: string, sellerName?: string) => {
+    if (!filename) return '';
+    
+    if (sellerName) {
+      // Format: uploads/products/seller_name/filename
+      const folderName = sellerName.toLowerCase().replace(/\s+/g, '_');
+      return `${API_URL}/uploads/products/${folderName}/${filename}`;
+    }
+    
+    return `${API_URL}/uploads/${filename}`;
+  };
+
+  // Update form when product prop changes - dengan protection dari loop
   useEffect(() => {
+    // Cek apakah product benar-benar berubah
+    const productId = product?.id || null;
+    
+    if (productId === lastProductIdRef.current && product) {
+      // Product sama, skip update
+      return;
+    }
+    
+    lastProductIdRef.current = productId;
+
     if (product) {
+      console.log('Updating form with product:', product);
+      
       setForm({
         title: product.title || "",
         description: product.description || "",
@@ -31,12 +70,40 @@ export default function AdminProductForm({ product, onSubmitSuccess }: ProductFo
         category: product.category || "",
         stock: product.stock || "",
       });
-      // Set existing image preview if available
+      
+      // Handle multiple existing images
       if (product.imageUrl) {
-        setImagePreview(`${API_URL}/uploads/${product.imageUrl}`);
+        const sellerName = product.seller?.name || product.seller?.nama || product.sellerName;
+        console.log('Processing images for seller:', sellerName);
+        
+        try {
+          const imageArray = getImageUrls(product.imageUrl);
+          console.log('Parsed image array:', imageArray);
+          
+          if (imageArray.length > 0) {
+            const imageUrls = imageArray.map((filename: string) => 
+              getImagePath(filename, sellerName)
+            );
+            
+            console.log('Generated image URLs:', imageUrls);
+            setExistingImages(imageUrls);
+            setImagePreview(imageUrls[0]);
+          } else {
+            setExistingImages([]);
+            setImagePreview(null);
+          }
+        } catch (error) {
+          console.error('Error processing images:', error);
+          setExistingImages([]);
+          setImagePreview(null);
+        }
+      } else {
+        setExistingImages([]);
+        setImagePreview(null);
       }
     } else {
       // Reset form for new product
+      console.log('Resetting form for new product');
       setForm({
         title: "",
         description: "",
@@ -44,10 +111,13 @@ export default function AdminProductForm({ product, onSubmitSuccess }: ProductFo
         category: "",
         stock: "",
       });
+      setExistingImages([]);
       setImagePreview(null);
     }
+    
+    // Always reset new image selection when product changes
     setImage(null);
-  }, [product, API_URL]);
+  }, [product?.id, API_URL]); // Hanya depend on product.id, bukan seluruh product object
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -57,7 +127,7 @@ export default function AdminProductForm({ product, onSubmitSuccess }: ProductFo
     const file = e.target.files?.[0] || null;
     setImage(file);
     
-    // Create preview URL
+    // Create preview URL for new image
     if (file) {
       const previewUrl = URL.createObjectURL(file);
       setImagePreview(previewUrl);
@@ -76,7 +146,6 @@ export default function AdminProductForm({ product, onSubmitSuccess }: ProductFo
       const url = product
         ? `${API_URL}/api/admin-products/${product.id}`
         : `${API_URL}/api/admin-products/create`;
-console.log("Product ID:", product?.id);
 
       const res = await fetch(url, {
         method: product ? "PUT" : "POST",
@@ -86,6 +155,7 @@ console.log("Product ID:", product?.id);
 
       if (res.ok) {
         alert("Berhasil!");
+        
         if (!product) {
           // Reset form only for new products
           setForm({
@@ -97,7 +167,10 @@ console.log("Product ID:", product?.id);
           });
           setImage(null);
           setImagePreview(null);
+          setExistingImages([]);
+          lastProductIdRef.current = null;
         }
+        
         onSubmitSuccess?.();
       } else {
         const errorData = await res.json();
@@ -111,12 +184,63 @@ console.log("Product ID:", product?.id);
     }
   };
 
+  // Component untuk menampilkan existing images
+  const ExistingImages = () => {
+    if (existingImages.length === 0) return null;
+
+    return (
+      <div className="space-y-3">
+        <div className="flex items-center justify-between">
+          <p className="text-sm font-medium text-gray-700">
+            Gambar Saat Ini ({existingImages.length} gambar):
+          </p>
+        </div>
+        
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+          {existingImages.map((imageUrl, index) => (
+            <div key={`${product?.id}-${index}`} className="relative group">
+              <div className="aspect-square overflow-hidden rounded-lg border-2 border-gray-200 hover:border-blue-300 transition-colors">
+                <img
+                  src={imageUrl}
+                  alt={`Product image ${index + 1}`}
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-200"
+                  onError={(e) => {
+                    const target = e.target as HTMLImageElement;
+                    // Fallback ke SVG placeholder
+                    target.src = "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjQiIGhlaWdodD0iNjQiIHZpZXdCb3g9IjAgMCA2NCA2NCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjY0IiBoZWlnaHQ9IjY0IiBmaWxsPSIjRjNGNEY2Ii8+CjxwYXRoIGQ9Ik0yMS4zMzMzIDIxLjMzMzNIMTZWNDIuNjY2N0g0OFYyMS4zMzMzSDQyLjY2NjdMMzkuOTk5OSAxOC42NjY3SDI0TDIxLjMzMzMgMjEuMzMzM1oiIHN0cm9rZT0iIzlDQTNBRiIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiLz4KPC9zdmc+";
+                    console.error('Image failed to load:', imageUrl);
+                  }}
+                  onLoad={() => {
+                    console.log('Image loaded successfully:', imageUrl);
+                  }}
+                />
+              </div>
+              
+              <div className="absolute top-2 right-2 bg-black bg-opacity-70 text-white text-xs px-2 py-1 rounded-full font-medium">
+                {index + 1}
+              </div>
+              
+              <div className="absolute bottom-2 left-2 right-2 bg-black bg-opacity-70 text-white text-xs p-1 rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                <p className="truncate">
+                  {imageUrl.split('/').pop() || `Image ${index + 1}`}
+                </p>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <p className="text-xs text-gray-500 italic">
+          Pilih gambar baru untuk mengganti yang ada
+        </p>
+      </div>
+    );
+  };
+
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {/* Left Column */}
         <div className="space-y-4">
-          {/* Product Name */}
           <div>
             <label htmlFor="title" className="block text-sm font-medium text-gray-700 mb-2">
               Nama Produk <span className="text-red-500">*</span>
@@ -133,9 +257,8 @@ console.log("Product ID:", product?.id);
             />
           </div>
 
-          {/* Price */}
           <div>
-            <label htmlFor ="price" className="block text-sm font-medium text-gray-700 mb-2">
+            <label htmlFor="price" className="block text-sm font-medium text-gray-700 mb-2">
               Harga <span className="text-red-500">*</span>
             </label>
             <div className="relative">
@@ -154,7 +277,6 @@ console.log("Product ID:", product?.id);
             </div>
           </div>
 
-          {/* Category */}
           <div>
             <label htmlFor="category" className="block text-sm font-medium text-gray-700 mb-2">
               Kategori
@@ -167,17 +289,17 @@ console.log("Product ID:", product?.id);
               className="w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
             >
               <option value="">Pilih Kategori</option>
-              <option value="elektronik">Elektronik</option>
-              <option value="fashion">Fashion</option>
-              <option value="rumah-tangga">Rumah Tangga</option>
-              <option value="olahraga">Olahraga</option>
-              <option value="kesehatan">Kesehatan</option>
-              <option value="otomotif">Otomotif</option>
+              <option value="Jaket">Jaket</option>
+              <option value="Fashion">Fashion</option>
+              <option value="Tas">Tas</option>
+              <option value="Sandal">Sandal</option>
+              <option value="Elektronik">Elektronik</option>
+              <option value="Aksesoris">Aksesoris</option>
+              <option value="Sepatu">Sepatu</option>
               <option value="lainnya">Lainnya</option>
             </select>
           </div>
 
-          {/* Stock */}
           <div>
             <label htmlFor="stock" className="block text-sm font-medium text-gray-700 mb-2">
               Stok
@@ -197,7 +319,6 @@ console.log("Product ID:", product?.id);
 
         {/* Right Column */}
         <div className="space-y-4">
-          {/* Description */}
           <div>
             <label htmlFor="description" className="block text-sm font-medium text-gray-700 mb-2">
               Deskripsi
@@ -213,20 +334,24 @@ console.log("Product ID:", product?.id);
             />
           </div>
 
-          {/* Image Upload */}
           <div>
             <label htmlFor="image" className="block text-sm font-medium text-gray-700 mb-2">
               Gambar Produk
             </label>
             <div className="space-y-3">
-              {/* Image Preview */}
-              {imagePreview && (
-                <div className="w-full h-32 border border-gray-200 rounded-lg overflow-hidden bg-gray-50">
-                  <img
-                    src={imagePreview}
-                    alt="Preview"
-                    className="w-full h-full object-cover"
-                  />
+              <ExistingImages />
+              
+              {/* New Image Preview */}
+              {imagePreview && !existingImages.includes(imagePreview) && (
+                <div className="space-y-2">
+                  <p className="text-sm font-medium text-gray-700">Preview Gambar Baru:</p>
+                  <div className="w-full h-32 border border-gray-200 rounded-lg overflow-hidden bg-gray-50">
+                    <img
+                      src={imagePreview}
+                      alt="New image preview"
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
                 </div>
               )}
               
@@ -241,7 +366,9 @@ console.log("Product ID:", product?.id);
                       <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"/>
                     </svg>
                     <p className="mb-2 text-sm text-gray-500">
-                      <span className="font-semibold">Klik untuk upload</span>
+                      <span className="font-semibold">
+                        {product ? "Klik untuk ganti gambar" : "Klik untuk upload"}
+                      </span>
                     </p>
                     <p className="text-xs text-gray-500">PNG, JPG, JPEG (MAX. 5MB)</p>
                   </div>
