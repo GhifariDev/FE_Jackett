@@ -700,7 +700,6 @@ const PenjualanBajuPage = () => {
                 {errors.gambar && (
                   <p className="text-red-500 text-sm flex items-center gap-1">
                     <AlertCircle className="w-4 h-4" />
-                    {errors.gambar as string}
                   </p>
                 )}
 
